@@ -92,7 +92,11 @@ Přeskočení: `--no-verify`. Logika: `scripts/linkcheck.py` (včetně kontroly 
 
 ## Publikace (GitHub Pages)
 
-Veřejný web: **https://matouspesice.github.io/mtb-deals/**
+Veřejný web: **https://matouspesice.github.io/bike-search/**
+
+Gravel report: https://matouspesice.github.io/bike-search/report-gravel168.html
+
+> Poznámka: staré URL pod `/mtb-deals/` po přejmenování repa nefungují — GitHub Pages je neredirectuje (jen `github.com/…/mtb-deals` → `bike-search`).
 
 ```powershell
 python mtb/scripts/publish_site.py
