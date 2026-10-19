@@ -96,14 +96,31 @@ Veřejný web: **https://matouspesice.github.io/bike-search/**
 
 Gravel report: https://matouspesice.github.io/bike-search/report-gravel168.html
 
-> Poznámka: staré URL pod `/mtb-deals/` po přejmenování repa nefungují — GitHub Pages je neredirectuje (jen `github.com/…/mtb-deals` → `bike-search`).
-
 ```powershell
 python mtb/scripts/publish_site.py
 git add docs && git commit -m "update reports" && git push
 ```
 
 Pages: větev `main`, složka `/docs`. Raw `data/` je v `.gitignore`.
+
+### Starý odkaz `/mtb-deals/` (redirect)
+
+Po přejmenování repa GitHub **nepřesměruje** project Pages URL
+(`…/mtb-deals/` → 404). Repo URL na github.com redirect má, Pages ne.
+
+Obnovení starého odkazu: user site `matouspesice.github.io` se složkou
+`mtb-deals/` (meta-refresh + JS). **Nevytvářej** znovu repo `mtb-deals` —
+zrušilo by to github.com redirect na `bike-search`.
+
+Cloud Agent GitHub App umí jen `bike-search`, ne `createRepository`. Do
+Cloud Environment secrets přidej `GH_TOKEN` (PAT s právem vytvořit repo),
+pak v cloudu:
+
+```bash
+bash scripts/setup_legacy_pages_redirect.sh
+```
+
+Stuby jsou v `redirects/legacy-mtb-deals/`.
 
 ## Výstupy
 

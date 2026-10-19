@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <title>Přesměrování</title>
+  <script>
+    (function () {
+      var path = location.pathname || "/";
+      var target = "https://matouspesice.github.io/bike-search/";
+      if (path.indexOf("/mtb-deals/") === 0 || path === "/mtb-deals") {
+        var rest = path.replace(/^\/mtb-deals\/?/, "");
+        target = "https://matouspesice.github.io/bike-search/" + rest;
+      }
+      location.replace(target + location.search + location.hash);
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0; url=https://matouspesice.github.io/bike-search/">
+</head>
+<body>
+  <p>Stránka se přesunula na <a href="https://matouspesice.github.io/bike-search/">bike-search</a>.</p>
+</body>
+</html>
