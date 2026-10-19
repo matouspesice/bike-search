@@ -1,6 +1,8 @@
 """Scrape cyklobazar.cz — celoodpružená / trail kola."""
 from __future__ import annotations
 
+from paths import SCRAPE_MTB, ensure_layout
+
 import json
 import re
 import time
@@ -11,7 +13,7 @@ from pathlib import Path
 from filters import CZK_PER_EUR, PRICE_EUR_MAX, PRICE_EUR_MIN, eur_to_czk
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "data" / "cyklobazar_listings.json"
+OUT = SCRAPE_MTB / "cyklobazar_listings.json"
 BASE = "https://www.cyklobazar.cz"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"}
 

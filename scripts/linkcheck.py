@@ -14,6 +14,8 @@ UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like 
 # Titles served when a willhaben ad is gone (redirect to the category page).
 CATEGORY_TITLES = (
     "mountainbikes - fahrräder",
+    "rennräder - fahrräder",
+    "trekkingfahrräder / crossbikes - fahrräder",
     "fahrräder & zubehör",
 )
 DEAD_MARKERS = (
@@ -89,3 +91,123 @@ def filter_live(entries: list[dict], workers: int = 16) -> tuple[list[dict], int
         flags = list(ex.map(is_live, urls))
     live = [e for e, ok in zip(entries, flags) if ok]
     return live, len(entries) - len(live)
+
+
+def _parse_displayed_eur(raw: str) -> float | None:
+    """AT/DE display prices: '9.979', '1.490 €', '1.234,50'."""
+    raw = raw.replace("\xa0", " ").replace("€", "").strip()
+    raw = re.sub(r"[^\d.,]", "", raw)
+    if not raw:
+        return None
+    if re.fullmatch(r"\d{1,3}(\.\d{3})+(,\d{1,2})?", raw):
+        raw = raw.replace(".", "").replace(",", ".")
+    elif "," in raw:
+        raw = raw.replace(".", "").replace(",", ".")
+    elif re.fullmatch(r"\d+\.\d{3}", raw):
+        raw = raw.replace(".", "")
+    try:
+        return float(raw)
+    except ValueError:
+        return None
+
+
+def extract_page_price_eur(url: str, body: str) -> float | None:
+    """Best-effort price from a live listing page (radbazar / willhaben / bazos)."""
+    # JSON / microdata first — prefer explicit quoted European prices ("1.850,00")
+    # before truncated meta amounts ("1.85").
+    for pat in (
+        r'"price"\s*:\s*"([\d.,]+)"',
+        r'itemprop="price"\s+content="([\d.,]+)"',
+        r'"PRICE/AMOUNT"\s*:\s*\[\s*"([\d.,]+)"',
+        r'property="product:price:amount"\s+content="([^"]+)"',
+        r'"amount"\s*:\s*"?([\d.,]+)"?',
+    ):
+        m = re.search(pat, body, re.I)
+        if m:
+            raw = m.group(1)
+            val = _parse_displayed_eur(raw)
+            # Radbazar meta sometimes truncates 1850 → "1.85"
+            if val is not None and val < 50 and re.fullmatch(r"\d{1,2}\.\d{2}", raw.strip()):
+                val = val * 1000
+            if val and val >= 50:
+                return val
+
+    if "radbazar.at" in url:
+        # JSON price is reliable ("1.850,00"); meta amount is often truncated ("1.85").
+        m = re.search(r'"price"\s*:\s*"([\d.,]+)"', body)
+        if m:
+            val = _parse_displayed_eur(m.group(1))
+            if val and val >= 50:
+                return val
+        m = re.search(
+            r'<meta property="product:price:amount" content="([^"]+)"',
+            body,
+            re.I,
+        )
+        if m:
+            raw = m.group(1)
+            val = _parse_displayed_eur(raw)
+            if val is not None and val < 50 and re.fullmatch(r"\d{1,2}\.\d{2}", raw):
+                val = val * 1000
+            if val and val >= 50:
+                return val
+        m = re.search(
+            r'(?:class="[^"]*font-bold[^"]*"[^>]*>)\s*([\d.,]+)\s*€',
+            body,
+            re.I,
+        )
+        if m:
+            val = _parse_displayed_eur(m.group(1))
+            if val and val >= 50:
+                return val
+
+    if "willhaben.at" in url:
+        m = re.search(r'"PRICE/AMOUNT"[^]]*?"([\d.]+)"', body)
+        if m:
+            try:
+                return float(m.group(1))
+            except ValueError:
+                pass
+
+    if "bazos.cz" in url or "sbazar.cz" in url or "cyklobazar.cz" in url:
+        m = re.search(r"([\d\s]{3,})\s*(?:&nbsp;)?\s*K[cč]", body, re.I)
+        if m:
+            digits = re.sub(r"[^\d]", "", m.group(1))
+            if digits:
+                return int(digits) / 25.0  # rough CZK→EUR
+    return None
+
+
+def price_matches(entry: dict, tolerance: float = 0.25) -> bool:
+    """True if scraped price is within ±tolerance of the live page price.
+
+    Skips check when the page price can't be read (don't drop on parse failure).
+    """
+    url = entry.get("url") or ""
+    listed = entry.get("price_eur")
+    if not url or listed is None:
+        return True
+    code, _final, body = _fetch(url)
+    if code < 0 or not body:
+        return True
+    page = extract_page_price_eur(url, body)
+    if page is None:
+        return True
+    # European JSON sometimes stores 9.979 meaning 9979 — already handled in parser,
+    # but guard tiny misreads of expensive bikes as < €50.
+    if page < 50:
+        return True
+    lo = listed * (1 - tolerance)
+    hi = listed * (1 + tolerance)
+    # Also allow absolute €80 slack for rounding / VB
+    if abs(page - listed) <= 80:
+        return True
+    return lo <= page <= hi
+
+
+def verify_prices(entries: list[dict], workers: int = 8) -> tuple[list[dict], int]:
+    """Drop ads where the live page price is wildly different from the scrape."""
+    with ThreadPoolExecutor(max_workers=workers) as ex:
+        flags = list(ex.map(price_matches, entries))
+    ok = [e for e, good in zip(entries, flags) if good]
+    return ok, len(entries) - len(ok)

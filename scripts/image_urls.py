@@ -6,8 +6,7 @@ import re
 from html import unescape
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
+from paths import SCRAPE_GRAVEL, SCRAPE_MTB, SCRAPE_ROAD
 
 WH_CDN = "https://cache.willhaben.at/mmo/"
 
@@ -77,53 +76,41 @@ def load_index() -> dict[str, str]:
         if key and img:
             idx[key] = img
 
-    p = DATA / "at_listings.json"
-    if p.exists():
+    scrape_dirs = (SCRAPE_MTB, SCRAPE_ROAD, SCRAPE_GRAVEL)
+
+    for folder in scrape_dirs:
+        p = folder / "at_listings.json"
+        if not p.exists():
+            continue
         for item in json.load(open(p, encoding="utf-8")):
             img = willhaben_image(item.get("attributes", {}))
             add(str(item.get("id")), img)
             seo = _attr_map(item.get("attributes", {})).get("SEO_URL", "")
             if seo:
                 add(f"https://www.willhaben.at/iad/{seo.rstrip('/')}", img)
+                add(f"https://www.willhaben.at/iad/{seo}", img)
 
-    p = DATA / "bazos_listings.json"
-    if p.exists():
-        for item in json.load(open(p, encoding="utf-8")):
-            img = item.get("image_url") or bazos_image(str(item.get("id", "")))
-            add(item.get("url"), img)
-            add(str(item.get("id")), img)
-
-    p = DATA / "sbazar_listings.json"
-    if p.exists():
-        for item in json.load(open(p, encoding="utf-8")):
-            img = item.get("image_url")
-            add(item.get("url"), img)
-            add(str(item.get("id")), img)
-
-    p = DATA / "buycycle_listings.json"
-    if p.exists():
-        for item in json.load(open(p, encoding="utf-8")):
-            img = item.get("image_url")
-            add(item.get("url"), img)
-            add(str(item.get("id")), img)
-
-    p = DATA / "bikefair_listings.json"
-    if p.exists():
-        for item in json.load(open(p, encoding="utf-8")):
-            img = item.get("image_url")
-            add(item.get("url"), img)
-
-    for fname in (
-        "cyklobazar_listings.json",
-        "radbazar_listings.json",
-        "radlmarkt_listings.json",
-        "biklo_listings.json",
-    ):
-        p = DATA / fname
-        if p.exists():
+    generic = [
+        ("bazos_listings.json", True),
+        ("sbazar_listings.json", False),
+        ("buycycle_listings.json", False),
+        ("bikefair_listings.json", False),
+        ("cyklobazar_listings.json", False),
+        ("radbazar_listings.json", False),
+        ("radlmarkt_listings.json", False),
+        ("biklo_listings.json", False),
+    ]
+    for folder in scrape_dirs:
+        for fname, use_bazos_fallback in generic:
+            p = folder / fname
+            if not p.exists():
+                continue
             for item in json.load(open(p, encoding="utf-8")):
-                add(item.get("url"), item.get("image_url"))
-                add(str(item.get("id")), item.get("image_url"))
+                img = item.get("image_url")
+                if not img and use_bazos_fallback:
+                    img = bazos_image(str(item.get("id", "")))
+                add(item.get("url"), img)
+                add(str(item.get("id")), img)
 
     return idx
 

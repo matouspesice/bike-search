@@ -5,9 +5,11 @@ import json
 import re
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parent.parent
-INP = ROOT / "data" / "at_listings.json"
-OUT = ROOT / "data" / "at_trail_deals.json"
+from paths import SCRAPE_MTB
+
+INP = SCRAPE_MTB / "at_listings.json"
+OUT = SCRAPE_MTB / "at_trail_deals.json"
+ROOT = SCRAPE_MTB.parent.parent  # kept for any relative use
 
 from filters import PRICE_EUR_MAX, PRICE_EUR_MIN, model_year as filter_model_year
 

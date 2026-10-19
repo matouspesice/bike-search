@@ -1,6 +1,8 @@
 """Scrape sport.bazos.cz — MTB / fully listings."""
 from __future__ import annotations
 
+from paths import SCRAPE_MTB, ensure_layout
+
 import json
 import re
 import time
@@ -11,7 +13,7 @@ from pathlib import Path
 from filters import CZK_PER_EUR, PRICE_EUR_MAX, PRICE_EUR_MIN, eur_to_czk
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "data" / "bazos_listings.json"
+OUT = SCRAPE_MTB / "bazos_listings.json"
 
 BASE = "https://sport.bazos.cz"
 QUERIES = ["kolo", "celoodpružené", "trail", "enduro"]

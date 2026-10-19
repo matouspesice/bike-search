@@ -1,6 +1,8 @@
 """Analyze normalized listings JSON from any source using shared filters."""
 from __future__ import annotations
 
+from paths import SCRAPE_MTB
+
 import json
 import sys
 from pathlib import Path
@@ -50,10 +52,10 @@ def analyze(items: list[dict], source_name: str) -> list[dict]:
 
 
 def main() -> None:
-    inp = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT / "data" / "bazos_listings.json"
+    inp = Path(sys.argv[1]) if len(sys.argv) > 1 else SCRAPE_MTB / "bazos_listings.json"
     out = inp.with_name(inp.stem.replace("_listings", "_deals") + ".json")
     if out == inp:
-        out = ROOT / "data" / f"{inp.stem}_deals.json"
+        out = SCRAPE_MTB / f"{inp.stem}_deals.json"
 
     items = json.load(open(inp, encoding="utf-8"))
     results = analyze(items, inp.stem)

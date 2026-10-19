@@ -1,6 +1,8 @@
 """Scrape BikeFair mountain bikes from SSR HTML cards."""
 from __future__ import annotations
 
+from paths import SCRAPE_MTB, ensure_layout
+
 import json
 import re
 import time
@@ -11,7 +13,7 @@ from pathlib import Path
 from filters import PRICE_EUR_MAX, PRICE_EUR_MIN
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "data" / "bikefair_listings.json"
+OUT = SCRAPE_MTB / "bikefair_listings.json"
 BASE = "https://bikefair.org"
 LIST_URL = f"{BASE}/c/mountain-bikes"
 

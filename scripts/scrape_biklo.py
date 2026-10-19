@@ -1,6 +1,8 @@
 """Scrape biklo.at — AT/CZ listings from __NEXT_DATA__."""
 from __future__ import annotations
 
+from paths import SCRAPE_MTB, ensure_layout
+
 import json
 import re
 import time
@@ -10,7 +12,7 @@ from pathlib import Path
 from filters import CZK_PER_EUR, PRICE_EUR_MAX, PRICE_EUR_MIN, czk_to_eur
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "data" / "biklo_listings.json"
+OUT = SCRAPE_MTB / "biklo_listings.json"
 BASE = "https://www.biklo.at"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"}
 

@@ -7,10 +7,10 @@ from pathlib import Path
 from analyze_generic import analyze
 from export_report import export as export_report
 from filters import PRICE_EUR_MAX, PRICE_EUR_MIN
+from paths import MERGED_MTB183, REPORT_MTB183_HTML, REPORT_MTB183_TXT, SCRAPE_MTB, ensure_layout
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
-OUT = DATA / "merged_deals.json"
+OUT = MERGED_MTB183
+DATA = SCRAPE_MTB  # per-source MTB deals / listings live here
 
 AT_SOURCES = {"willhaben.at", "radbazar.at", "radlmarkt.at", "biklo.at"}
 CZ_SOURCES = {"bazos.cz", "sbazar.cz", "cyklobazar.cz", "biklo.cz"}
@@ -205,9 +205,12 @@ def main() -> None:
         "top": fit_ok[:50],
         "all": fit_ok,
     }
+    ensure_layout()
     with open(OUT, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
-    html_path, txt_path = export_report(report)
+    html_path, txt_path = export_report(
+        report, html_out=REPORT_MTB183_HTML, txt_out=REPORT_MTB183_TXT
+    )
     print(f"Saved {OUT}")
     print(f"Report HTML: {html_path}")
     print(f"Report text: {txt_path}")

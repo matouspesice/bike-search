@@ -1,6 +1,8 @@
 """Scrape Buycycle MTB listings from Next.js RSC payload."""
 from __future__ import annotations
 
+from paths import SCRAPE_MTB, ensure_layout
+
 import json
 import re
 import time
@@ -12,7 +14,7 @@ from filters import PRICE_EUR_MAX, PRICE_EUR_MIN
 from image_urls import buycycle_image_from_blob
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "data" / "buycycle_listings.json"
+OUT = SCRAPE_MTB / "buycycle_listings.json"
 
 LOCALES = ["en-at", "en-cz", "en-de"]
 BASE = "https://www.buycycle.com"

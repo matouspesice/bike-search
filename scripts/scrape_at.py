@@ -1,6 +1,8 @@
 """Scrape willhaben MTB listings — whole Austria, 800–1900 EUR."""
 from __future__ import annotations
 
+from paths import SCRAPE_MTB, ensure_layout
+
 import json
 import re
 import time
@@ -9,7 +11,7 @@ import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "data" / "at_listings.json"
+OUT = SCRAPE_MTB / "at_listings.json"
 
 BASE_URL = (
     "https://www.willhaben.at/iad/kaufen-und-verkaufen/marktplatz/"

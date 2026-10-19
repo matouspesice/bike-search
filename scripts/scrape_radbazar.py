@@ -1,6 +1,8 @@
 """Scrape radbazar.at — Austrian bike marketplace."""
 from __future__ import annotations
 
+from paths import SCRAPE_MTB, ensure_layout
+
 import json
 import re
 import time
@@ -12,7 +14,7 @@ from pathlib import Path
 from filters import PRICE_EUR_MAX, PRICE_EUR_MIN
 
 ROOT = Path(__file__).resolve().parent.parent
-OUT = ROOT / "data" / "radbazar_listings.json"
+OUT = SCRAPE_MTB / "radbazar_listings.json"
 BASE = "https://www.radbazar.at"
 HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0"}
 
@@ -31,10 +33,19 @@ def fetch(url: str) -> str:
 
 
 def parse_eur_price(raw: str) -> float | None:
+    """Parse AT/DE prices: '1.490', '9.979', '1.234,50', '650 €'."""
     raw = raw.replace("\xa0", " ").replace("€", "").strip()
-    raw = raw.replace(".", "").replace(",", ".") if "," in raw else raw
+    raw = re.sub(r"[^\d.,]", "", raw)
+    if not raw:
+        return None
+    if re.fullmatch(r"\d{1,3}(\.\d{3})+(,\d{1,2})?", raw):
+        raw = raw.replace(".", "").replace(",", ".")
+    elif "," in raw:
+        raw = raw.replace(".", "").replace(",", ".")
+    elif re.fullmatch(r"\d+\.\d{3}", raw):
+        raw = raw.replace(".", "")
     try:
-        return float(re.sub(r"[^\d.]", "", raw) or 0)
+        return float(raw)
     except ValueError:
         return None
 
@@ -50,10 +61,12 @@ def parse_list_page(html: str) -> list[dict]:
         url, lid, title = m.groups()
         if lid in seen:
             continue
-        block_start = max(0, m.start() - 1200)
-        block = html[block_start : m.end() + 400]
-        price_m = re.search(r'<p class="font-bold mt-1">\s*([^<]+?)\s*</p>', block)
-        img_m = re.search(r'<img src="(https://www\.radbazar\.at/storage/[^"]+)"', block)
+        # Image BEFORE title; price AFTER — separate windows so cards don't mix.
+        before = html[max(0, m.start() - 1200) : m.start()]
+        after = html[m.end() : m.end() + 500]
+        price_m = re.search(r'<p class="font-bold mt-1">\s*([^<]+?)\s*</p>', after)
+        imgs = re.findall(r'<img src="(https://www\.radbazar\.at/storage/[^"]+)"', before)
+        image_url = imgs[-1] if imgs else None
         price = parse_eur_price(price_m.group(1)) if price_m else None
         if price is None or price < PRICE_EUR_MIN or price > PRICE_EUR_MAX:
             continue
@@ -66,7 +79,7 @@ def parse_list_page(html: str) -> list[dict]:
             "price_eur": price,
             "location": "Österreich",
             "url": url,
-            "image_url": img_m.group(1) if img_m else None,
+            "image_url": image_url,
         })
     return items
 

@@ -1,6 +1,6 @@
 """Build a static site in docs/ for GitHub Pages.
 
-Copies the two generated reports and creates a landing page (rozcestník).
+Copies generated reports and creates a landing page (rozcestník).
 The report HTML files are self-contained (images are hot-linked from CDNs),
 so docs/ needs no data/ folder.
 
@@ -14,15 +14,25 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
+from paths import (
+    MERGED_GRAVEL168,
+    MERGED_MTB183,
+    MERGED_ROAD168,
+    MERGED_W175,
+    REPORT_GRAVEL168_HTML,
+    REPORT_MTB183_HTML,
+    REPORT_ROAD168_HTML,
+    REPORT_W175_HTML,
+)
+
 ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
 DOCS = ROOT / "docs"
 
 REPORTS = [
     {
-        "src": DATA / "report.html",
+        "src": REPORT_MTB183_HTML,
         "out": "report-183.html",
-        "merged": DATA / "merged_deals.json",
+        "merged": MERGED_MTB183,
         "title": "Trail / All-Mountain — ~183 cm",
         "fit": "velikost M / L",
         "travel": "~130–170 mm",
@@ -30,14 +40,34 @@ REPORTS = [
         "desc": "Celoodpružená trail/AM kola pro vyššího jezdce (~183 cm).",
     },
     {
-        "src": DATA / "report_women175.html",
+        "src": REPORT_W175_HTML,
         "out": "report-175.html",
-        "merged": DATA / "merged_deals_w175.json",
+        "merged": MERGED_W175,
         "title": "Enduro / All-Mountain — ~175 cm",
         "fit": "velikost S / M",
         "travel": "~140–180 mm",
         "price": "€600–1900",
         "desc": "Enduro/AM kola pro nižší jezdkyni (~175 cm, klidně o něco méně) — flow traily, bikeparky, ale vyjede i nahoru.",
+    },
+    {
+        "src": REPORT_ROAD168_HTML,
+        "out": "report-road168.html",
+        "merged": MERGED_ROAD168,
+        "title": "Silniční kolo — žena ~168 cm",
+        "fit": "velikost XS / S (≈47–53 cm)",
+        "travel": "karbon nebo 105+",
+        "price": "€400–1600 (do ~40 tis. Kč)",
+        "desc": "Silniční kola 2021+, ideálně karbonový rám nebo řazení Shimano 105 / SRAM Rival a výš, v dobrém stavu.",
+    },
+    {
+        "src": REPORT_GRAVEL168_HTML,
+        "out": "report-gravel168.html",
+        "merged": MERGED_GRAVEL168,
+        "title": "Gravel / Endurance — žena ~168 cm",
+        "fit": "velikost XS / S (≈47–53 cm)",
+        "travel": "gravel nebo endurance · karbon nebo 105+",
+        "price": "€400–1600 (do ~40 tis. Kč)",
+        "desc": "Gravel a endurance silniční kola 2021+, XS/S, ideálně karbon nebo řazení 105 / Rival+.",
     },
 ]
 
@@ -67,7 +97,7 @@ def build_index() -> str:
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MTB bazar — přehledy kol</title>
+  <title>Bazar kol — přehledy</title>
   <style>
     :root {{ font-family: system-ui, "Segoe UI", sans-serif; line-height: 1.5; }}
     body {{ max-width: 760px; margin: 0 auto; padding: 2.5rem 1.25rem 4rem; background: #f6f7f9; color: #1a1a1a; }}
@@ -89,8 +119,8 @@ def build_index() -> str:
   </style>
 </head>
 <body>
-  <h1>MTB bazar — přehledy kol</h1>
-  <p class="sub">Celoodpružená trail/enduro kola z rakouských a českých bazarů. Odkazy jsou ověřené jako aktivní.</p>
+  <h1>Bazar kol — přehledy</h1>
+  <p class="sub">Trail/enduro MTB, silniční a gravel/endurance z rakouských a českých bazarů. Odkazy jsou ověřené jako aktivní.</p>
   <div class="cards">
 {cards}
   </div>

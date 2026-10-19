@@ -1,6 +1,8 @@
 """Parse offline willhaben MHTML listing pages into listings.json."""
 from __future__ import annotations
 
+from paths import LEGACY, ensure_layout
+
 import json
 import re
 from email import message_from_bytes
@@ -8,7 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OFFLINE_DIR = ROOT / "offline-pages"
-OUT = ROOT / "data" / "listings.json"
+OUT = LEGACY / "listings.json"
 
 
 def load_html_from_mhtml(path: Path) -> str:

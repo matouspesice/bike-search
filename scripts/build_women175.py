@@ -31,12 +31,18 @@ from filters import (
     model_year,
 )
 from linkcheck import filter_live
+from paths import (
+    MERGED_W175,
+    REPORT_W175_HTML,
+    REPORT_W175_TXT,
+    SCRAPE_MTB,
+    ensure_layout,
+)
 
-ROOT = Path(__file__).resolve().parent.parent
-DATA = ROOT / "data"
-OUT_JSON = DATA / "merged_deals_w175.json"
-OUT_HTML = DATA / "report_women175.html"
-OUT_TXT = DATA / "report_women175.txt"
+OUT_JSON = MERGED_W175
+OUT_HTML = REPORT_W175_HTML
+OUT_TXT = REPORT_W175_TXT
+DATA = SCRAPE_MTB
 
 # Enduro / all-mountain around 160 mm — still pedalable uphill.
 TRAVEL_MIN = 140
@@ -384,6 +390,7 @@ def main() -> None:
         "top": kept[:50],
         "all": kept,
     }
+    ensure_layout()
     with open(OUT_JSON, "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)
 

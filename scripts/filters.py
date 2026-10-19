@@ -29,7 +29,7 @@ def extract_years(text: str) -> list[int]:
         t,
     ):
         years.append(int(m.group(1)))
-    for m in re.finditer(r"\b(20(?:1[89]|2[0-5]))\b", text):
+    for m in re.finditer(r"\b(20(?:1[89]|2[0-7]))\b", text):
         years.append(int(m.group(1)))
     return years
 
@@ -43,7 +43,9 @@ def model_year(text: str) -> int | None:
     ):
         explicit.append(int(m.group(1)))
     if explicit:
-        return max(explicit)
+        # Allow current / next model year (ads often say 2026 already).
+        ok = [y for y in explicit if 2015 <= y <= 2027]
+        return max(ok) if ok else None
     years = extract_years(text)
     if not years:
         return None
@@ -56,7 +58,8 @@ def model_year(text: str) -> int | None:
     filtered = [y for y in years if not service_ctx.search(t) or y != max(years)]
     if not filtered:
         filtered = [y for y in years if y <= 2024] or years
-    return max(y for y in filtered if 2015 <= y <= 2025)
+    ok = [y for y in filtered if 2015 <= y <= 2027]
+    return max(ok) if ok else None
 
 
 def is_vintage_or_wrong_category(text: str) -> tuple[bool, str]:
