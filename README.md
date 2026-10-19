@@ -110,6 +110,10 @@ Obnovení starého odkazu: user site `matouspesice.github.io` se složkou
 `mtb-deals/` (meta-refresh + JS). **Nevytvářej** znovu repo `mtb-deals` —
 zrušilo by to github.com redirect na `bike-search`.
 
+Cloud Agent GitHub App umí jen `bike-search`, ne `createRepository`. Do
+Cloud Environment secrets přidej `GH_TOKEN` (PAT s právem vytvořit repo),
+pak v cloudu:
+
 ```bash
 bash scripts/setup_legacy_pages_redirect.sh
 ```

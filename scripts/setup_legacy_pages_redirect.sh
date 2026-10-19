@@ -6,7 +6,9 @@
 #   Znovuvytvoření matouspesice/mtb-deals by zrušilo github.com redirect
 #   mtb-deals → bike-search. User site to nekazí.
 #
-# Použití (lokálně, s přihlášeným gh):
+# Cloud Agent: Cursor GitHub App neumí createRepository. Přidej do
+# environment secrets GH_TOKEN (fine-grained PAT s Repository creation +
+# Contents write, nebo classic PAT scope `repo`), pak:
 #   bash scripts/setup_legacy_pages_redirect.sh
 
 set -euo pipefail
@@ -17,8 +19,20 @@ SRC_DIR="$(cd "$(dirname "$0")/.." && pwd)/redirects/legacy-mtb-deals"
 TMP_DIR="$(mktemp -d)"
 trap 'rm -rf "$TMP_DIR"' EXIT
 
+# Prefer user PAT from Cloud Environment secrets (gh picks up GH_TOKEN /
+# GITHUB_TOKEN). Without it, the Cursor App token cannot create repos.
+if [[ -n "${GH_TOKEN:-}" || -n "${GITHUB_TOKEN:-}" ]]; then
+  export GH_TOKEN="${GH_TOKEN:-$GITHUB_TOKEN}"
+  echo "==> Používám GH_TOKEN z environment secrets"
+fi
+
 if ! command -v gh >/dev/null; then
-  echo "Potřebuješ GitHub CLI (gh) přihlášené k účtu ${OWNER}." >&2
+  echo "Chybí GitHub CLI (gh)." >&2
+  exit 1
+fi
+
+if ! gh auth status >/dev/null 2>&1; then
+  echo "gh není autentizované. Přidej Cloud Environment secret GH_TOKEN." >&2
   exit 1
 fi
 
