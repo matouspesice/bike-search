@@ -92,7 +92,7 @@ Přeskočení: `--no-verify`. Logika: `scripts/linkcheck.py` (včetně kontroly 
 
 ## Publikace (GitHub Pages)
 
-Veřejný web: **https://matouspesice.github.io/mtb-deals/**
+Veřejný web: **https://matouspesice.github.io/bike-search/**
 
 ```powershell
 python mtb/scripts/publish_site.py
@@ -100,6 +100,21 @@ git add docs && git commit -m "update reports" && git push
 ```
 
 Pages: větev `main`, složka `/docs`. Raw `data/` je v `.gitignore`.
+
+### Starý odkaz `/mtb-deals/` (redirect)
+
+Po přejmenování repa GitHub **nepřesměruje** project Pages URL
+(`…/mtb-deals/` → 404). Repo URL na github.com redirect má, Pages ne.
+
+Obnovení starého odkazu: user site `matouspesice.github.io` se složkou
+`mtb-deals/` (meta-refresh + JS). **Nevytvářej** znovu repo `mtb-deals` —
+zrušilo by to github.com redirect na `bike-search`.
+
+```bash
+bash scripts/setup_legacy_pages_redirect.sh
+```
+
+Stuby jsou v `redirects/legacy-mtb-deals/`.
 
 ## Výstupy
 
