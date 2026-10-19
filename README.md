@@ -94,6 +94,8 @@ Přeskočení: `--no-verify`. Logika: `scripts/linkcheck.py` (včetně kontroly 
 
 Veřejný web: **https://matouspesice.github.io/bike-search/**
 
+Gravel report: https://matouspesice.github.io/bike-search/report-gravel168.html
+
 ```powershell
 python mtb/scripts/publish_site.py
 git add docs && git commit -m "update reports" && git push
