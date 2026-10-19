@@ -11,16 +11,25 @@
     .sub { color: #555; margin-top: 0; }
     table { border-collapse: collapse; margin: 1rem 0; background: #fff; }
     th, td { border: 1px solid #ddd; padding: 0.4rem 0.75rem; text-align: left; }
-    section { margin-top: 2rem; }
+    section { margin-top: 1.25rem; }
     section h2 { border-bottom: 2px solid #2d6a4f; padding-bottom: 0.35rem; }
+    .tabs { display: flex; gap: 0.5rem; margin: 1rem 0 0.5rem; flex-wrap: wrap; }
+    .tab {
+      font: inherit; font-weight: 600; cursor: pointer; border: 1px solid #c5cdd4;
+      background: #fff; color: #333; border-radius: 999px; padding: 0.45rem 1rem;
+    }
+    .tab.active { background: #1b4332; color: #fff; border-color: #1b4332; }
+    .tab-hint { color: #555; font-size: 0.92rem; margin: 0.5rem 0 1rem; }
     .card { background: #fff; border: 1px solid #e0e0e0; border-radius: 8px; padding: 0.85rem 1rem; margin: 0.65rem 0; }
     .card.pinned { border-color: #2d6a4f; box-shadow: 0 0 0 2px #2d6a4f22; }
+    .card.over-budget { opacity: 0.85; border-style: dashed; }
     .card-body { display: flex; gap: 1rem; align-items: flex-start; }
     .thumb { flex: 0 0 auto; display: block; }
     .thumb img { width: 140px; height: 105px; object-fit: cover; border-radius: 6px; background: #eee; border: 1px solid #ddd; }
     .card-text { flex: 1; min-width: 0; }
     .row { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; align-items: baseline; font-size: 0.9rem; }
     .price { font-weight: 700; font-size: 1.15rem; color: #1b4332; }
+    .was { font-weight: 400; font-size: 0.85rem; color: #888; text-decoration: line-through; margin-left: 0.35rem; }
     .meta, .loc, .notes { color: #555; margin: 0.25rem 0; }
     .src { margin-left: auto; font-size: 0.8rem; color: #888; }
     h3 { margin: 0.35rem 0; font-size: 1.05rem; }
@@ -40,7 +49,7 @@
 </head>
 <body>
   <h1>Gravel / Endurance — žena ~168 cm (XS/S, ≈47–53 cm)</h1>
-  <p class="sub">€400–€1600 (do ~40 tis. Kč) · 2019+ · karbon / 105+ / GRX / Tiagra · velikost dle značky pro ~168 cm · vygenerováno 2026-10-19 12:18 · fotek 52/52</p>
+  <p class="sub">bazar €400–€1600 · nová do ~50 tis. Kč · velikost dle značky · sytější barvy v záložce Nová · vygenerováno 2026-10-19 12:25 · fotek 53/53</p>
   <div class="toolbar">
     <label for="sort-mode">Řazení
       <select id="sort-mode" aria-label="Řazení inzerátů">
@@ -50,12 +59,18 @@
       </select>
     </label>
   </div>
-  <table>
-    <thead><tr><th>Zdroj</th><th>Počet</th></tr></thead>
-    <tbody><tr><td>willhaben.at</td><td>21</td></tr><tr><td>bazos.cz</td><td>18</td></tr><tr><td>sbazar.cz</td><td>9</td></tr><tr><td>radbazar.at</td><td>4</td></tr></tbody>
-  </table>
-  <section class="deal-section"><h2>Inzeráty (52)</h2>
-<div class="card-list sortable">
+  
+  <div class="tabs" role="tablist">
+    <button type="button" class="tab active" data-tab="bazar" role="tab" aria-selected="true">Bazar (53)</button>
+    <button type="button" class="tab" data-tab="nova" role="tab" aria-selected="false">Nová / e-shop (13)</button>
+  </div>
+  <section class="deal-section tab-panel active" id="panel-bazar" role="tabpanel">
+    <p class="tab-hint">Bazárové inzeráty (AT/CZ) — ověřené odkazy, velikost dle značky pro ~168&nbsp;cm.</p>
+    <table>
+      <thead><tr><th>Zdroj</th><th>Počet</th></tr></thead>
+      <tbody><tr><td>willhaben.at</td><td>22</td></tr><tr><td>bazos.cz</td><td>18</td></tr><tr><td>sbazar.cz</td><td>9</td></tr><tr><td>radbazar.at</td><td>4</td></tr></tbody>
+    </table>
+    <div class="card-list sortable">
 <article class="card" data-price="999.0" data-score="25">
   <div class="card-body">
     <a class="thumb" href="https://www.willhaben.at/iad/kaufen-und-verkaufen/d/cube-attain-gtc-race-rennrad-1555677517/" target="_blank" rel="noopener"><img src="https://cache.willhaben.at/mmo/7/155/567/7517_2019791853.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"></a>
@@ -188,6 +203,21 @@
       <h3><a href="https://www.willhaben.at/iad/kaufen-und-verkaufen/d/rennrad-trek-domane-4-5-wsd-gr-52-978082856/" target="_blank" rel="noopener">Rennrad Trek Domane 4.5 WSD/ Gr.52</a></h3>
       <p class="loc">6067 Absam, Tirol</p>
       <p class="notes">year?, carbon frame, ideal spec, endurance, women, good price, wenig gefahren</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1200.0" data-score="16">
+  <div class="card-body">
+    <a class="thumb" href="https://www.willhaben.at/iad/kaufen-und-verkaufen/d/verkaufe-rennrad-simplon-gran-fondo-49cm-790384896/" target="_blank" rel="noopener"><img src="https://cache.willhaben.at/mmo/6/790/384/896_1213467913.jpg" alt="" loading="lazy" referrerpolicy="no-referrer"></a>
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1200 (30 000 Kč)</span>
+        <span class="meta">rok? · endurance|carbon+105 · vel. 49 · score 16</span>
+        <span class="src">willhaben.at</span>
+      </div>
+      <h3><a href="https://www.willhaben.at/iad/kaufen-und-verkaufen/d/verkaufe-rennrad-simplon-gran-fondo-49cm-790384896/" target="_blank" rel="noopener">Verkaufe Rennrad Simplon Gran Fondo - 49cm</a></h3>
+      <p class="loc">4052 Ansfelden, Oberösterreich</p>
+      <p class="notes">year?, carbon frame, 105+/GRX, ideal spec, women, good price</p>
     </div>
   </div>
 </article>
@@ -837,7 +867,220 @@
   </div>
 </article>
 </div>
-</section>
+  </section>
+  <section class="deal-section tab-panel" id="panel-nova" role="tabpanel" hidden>
+    <p class="tab-hint">Nová / outlet z e-shopů (CZ + DE/AT) — slevy, sytější barvy. Ceny a velikosti se mění; před nákupem ověř na e-shopu. Položky „nad rozpočtem“ jsou jen tip.</p>
+    <div class="card-list sortable">
+<article class="card" data-price="916" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€916 (22 890 Kč) <span class="was">bylo 30 990 Kč</span></span>
+        <span class="meta">MY2025 · vel. 52 · −26 % · modrá / oranžová</span>
+        <span class="src">cykloerben.cz (CZ)</span>
+      </div>
+      <h3><a href="https://www.cykloerben.cz/gravel/" target="_blank" rel="noopener">AUTHOR Aura XR3 2025 modrá/oranžová</a></h3>
+      <p class="loc">Česko · akční cena</p>
+      <p class="notes">Shimano Sora 2×9, entry gravel</p>
+      <p class="notes">silná sleva, výrazné barvy, nižší groupset — OK na start</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="920" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€920 (22 990 Kč) <span class="was">bylo 30 988 Kč</span></span>
+        <span class="meta">MY2025 · vel. 52 · −26 % · modrá / oranžová</span>
+        <span class="src">author24.cz (CZ)</span>
+      </div>
+      <h3><a href="https://author24.cz/author-aura-xr3-2025-52-modra/oranzova-gravel-kolo/p868" target="_blank" rel="noopener">AUTHOR Aura XR3 2025 modrá/oranžová</a></h3>
+      <p class="loc">Česko · skladem</p>
+      <p class="notes">Shimano Sora 2×9, Panaracer Gravel King 38c</p>
+      <p class="notes">stejný model, jiný shop, skladem</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="920" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€920 (22 990 Kč) <span class="was">bylo 33 990 Kč</span></span>
+        <span class="meta">MY2025 · vel. ověř velikost (u shopu často 56 — pro 168 spíš 52) · −32 % · chrimson / červená</span>
+        <span class="src">cyklosauer.cz (CZ)</span>
+      </div>
+      <h3><a href="https://www.cyklosauer.cz/gravel-kola/" target="_blank" rel="noopener">Trek Checkpoint ALR 3 2025 Chrimson</a></h3>
+      <p class="loc">Česko</p>
+      <p class="notes">Trek Alpha alu, gravel</p>
+      <p class="notes">velká sleva, před nákupem ověřit S/52, červená výrazná</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1000" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1000 (24 990 Kč) <span class="was">bylo 33 990 Kč</span></span>
+        <span class="meta">MY2025 · vel. XS / S · −26 % · crayon teal (tyrkys)</span>
+        <span class="src">bikecontrol.cz (CZ)</span>
+      </div>
+      <h3><a href="https://www.bikecontrol.cz/akce/gravel-kola/" target="_blank" rel="noopener">Merida Silex 200 Crayon Teal 2025</a></h3>
+      <p class="loc">Česko</p>
+      <p class="notes">entry Merida gravel, alu</p>
+      <p class="notes">výrazný teal, XS/S skladem dle shopu</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1408" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1408 (35 190 Kč) <span class="was">bylo 41 400 Kč</span></span>
+        <span class="meta">MY2024 · vel. XS / S (S = 158–169 cm → ideál) · −15 % · charcoal plum (fialová)</span>
+        <span class="src">koloshop.cz (CZ)</span>
+      </div>
+      <h3><a href="https://www.koloshop.cz/liv/gravel-kola" target="_blank" rel="noopener">Liv Devote 1 Charcoal Plum</a></h3>
+      <p class="loc">Česko</p>
+      <p class="notes">dámská geometrie Liv, GRX RX400 2×10</p>
+      <p class="notes">dámské, fialová, S přesně na 168 cm</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1440" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1440 (35 990 Kč) <span class="was">bylo 49 990 Kč</span></span>
+        <span class="meta">MY2026 · vel. 50 (160–170 cm) / 52 (168–178) · −28 % · magenta / růžová</span>
+        <span class="src">bikestyle.cz (CZ)</span>
+      </div>
+      <h3><a href="https://www.bikestyle.cz/author-aura-xr5-2026-50-magenta-matna-gravel-kolo/" target="_blank" rel="noopener">AUTHOR Aura XR5 2026 magenta-matná</a></h3>
+      <p class="loc">Česko · skladem</p>
+      <p class="notes">GRX 1×12, karbonová vidlice, Panaracer 40c</p>
+      <p class="notes">výrazná magenta, GRX, ideální barva, vel. 50 preferovat pro 168 cm</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1499" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1499 (37 475 Kč)</span>
+        <span class="meta">MY2027 · vel. ověř XS / S (peach pink často XS–XL) · peach pink</span>
+        <span class="src">bike-discount.de (DE)</span>
+      </div>
+      <h3><a href="https://www.bike-discount.de/en/scott/bikes/gravel" target="_blank" rel="noopener">Scott Speedster Gravel 40 Peach Pink</a></h3>
+      <p class="loc">Německo · doprava do CZ/AT</p>
+      <p class="notes">alu + karbonová vidlice, Shimano CUES 1×10/11, 45c</p>
+      <p class="notes">nejvýraznější růžová, DE e-shop, před nákupem vybrat velikost XS/S</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1648" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1648 (41 199 Kč) <span class="was">bylo 48 399 Kč</span></span>
+        <span class="meta">MY2024 · vel. XS / S · −15 % · clear sky (modrá)</span>
+        <span class="src">supshop.cz (CZ)</span>
+      </div>
+      <h3><a href="https://www.supshop.cz/gravel-a-silnice/" target="_blank" rel="noopener">Liv Devote 0 Clear Sky</a></h3>
+      <p class="loc">Česko</p>
+      <p class="notes">dámské Liv, GRX 2×12</p>
+      <p class="notes">modrá, dámské, lehce nad 40 tis. — pořád do 50</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1720" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1720 (42 990 Kč) <span class="was">bylo 57 990 Kč</span></span>
+        <span class="meta">MY2025 · vel. ověř 50 / 52 · −26 % · černá / žlutá</span>
+        <span class="src">kolasport.cz (CZ)</span>
+      </div>
+      <h3><a href="https://kolasport.cz/slevy" target="_blank" rel="noopener">AUTHOR Aura XR6 2025 černá/žlutá</a></h3>
+      <p class="loc">Česko · Rokycany</p>
+      <p class="notes">vyšší Author gravel, výrazná žlutá</p>
+      <p class="notes">žlutý accent, solidní sleva</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1749" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1749 (43 725 Kč) <span class="was">bylo 44 975 Kč</span></span>
+        <span class="meta">MY2025 · vel. XS (166–172 cm → ideál pro 168) · −3 % · Milk (bílá) — outlet vizuální vady</span>
+        <span class="src">canyon.com outlet (AT)</span>
+      </div>
+      <h3><a href="https://www.canyon.com/de-at/fahrrad-outlet/gravel-bike/grizl-6/50053625.html" target="_blank" rel="noopener">Canyon Grizl 6 XS outlet (Milk)</a></h3>
+      <p class="loc">Rakousko / Canyon outlet</p>
+      <p class="notes">SRAM Apex 1×, alu Grizl, nové s optickými vadami</p>
+      <p class="notes">Canyon XS přesně, outlet nový se škrábanci, doprava AT→CZ</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="1799" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€1799 (44 975 Kč) <span class="was">bylo 67 475 Kč</span></span>
+        <span class="meta">MY2025 · vel. ověř XS / S / 51 · −33 % · platinum (stříbrná — méně výrazná, ale karbon+sleva)</span>
+        <span class="src">bike-discount.de (DE)</span>
+      </div>
+      <h3><a href="https://www.bike-discount.de/de/gravel_bikes" target="_blank" rel="noopener">Cannondale Topstone Carbon 4 (sale)</a></h3>
+      <p class="loc">Německo</p>
+      <p class="notes">karbonový Topstone, CUES 1×11</p>
+      <p class="notes">karbon, velká DE sleva, barva neutrální — ber kvůli spec</p>
+    </div>
+  </div>
+</article>
+<article class="card" data-price="2000" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€2000 (49 990 Kč) <span class="was">bylo 66 990 Kč</span></span>
+        <span class="meta">MY2025 · vel. XS / S · −25 % · dark strawberry (vínově růžová)</span>
+        <span class="src">bikecontrol.cz (CZ)</span>
+      </div>
+      <h3><a href="https://www.bikecontrol.cz/akce/gravel-kola/" target="_blank" rel="noopener">Merida Silex 700 Dark Strawberry</a></h3>
+      <p class="loc">Česko</p>
+      <p class="notes">vyšší Silex, na horní hranici rozpočtu</p>
+      <p class="notes">růžovo-červená, strop 50 tis.</p>
+    </div>
+  </div>
+</article>
+<article class="card over-budget" data-price="2499" data-score="0">
+  <div class="card-body">
+    
+    <div class="card-text">
+      <div class="row">
+        <span class="price">€2499 (62 475 Kč)</span>
+        <span class="meta">MY2025 · vel. ověř XS / S · mellow yellow / lilac</span>
+        <span class="src">bike-discount.de (DE)</span>
+      </div>
+      <h3><a href="https://www.bike-discount.de/de/gravel_bikes" target="_blank" rel="noopener">Cube Nuroad C:62 Pro mellowyellow´n´lilac</a></h3>
+      <p class="loc">Německo</p>
+      <p class="notes">karbon C:62, výrazná žluto-fialová</p>
+      <p class="notes">NAD rozpočtem (~62 tis.), nechat jako tip pokud sleva poroste</p>
+    </div>
+  </div>
+</article>
+</div>
+  </section>
   <script>
 (function () {
   const KEY = "mtb-report-sort";
@@ -872,6 +1115,21 @@
     localStorage.setItem(KEY, select.value);
     applySort(select.value);
   });
+
+  document.querySelectorAll(".tab").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".tab").forEach((b) => {
+        b.classList.toggle("active", b === btn);
+        b.setAttribute("aria-selected", b === btn ? "true" : "false");
+      });
+      document.querySelectorAll(".tab-panel").forEach((p) => {
+        const on = p.id === "panel-" + btn.dataset.tab;
+        p.classList.toggle("active", on);
+        p.hidden = !on;
+      });
+    });
+  });
+
 })();
   </script>
 </body>
