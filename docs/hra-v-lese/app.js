@@ -96,9 +96,45 @@
     return;
   }
 
-  var map = L.map("map", { zoomControl: true });
+  function isMobileLayout() {
+    return window.matchMedia("(max-width: 820px)").matches;
+  }
+
+  // Mobile: no one-finger map drag — vertical page scroll must win.
+  // Pan/zoom via +/- buttons (and pinch zoom). Desktop keeps normal drag.
+  var map = L.map("map", {
+    zoomControl: true,
+    dragging: !isMobileLayout(),
+    doubleClickZoom: true,
+    boxZoom: !isMobileLayout(),
+    keyboard: !isMobileLayout(),
+    scrollWheelZoom: !isMobileLayout(),
+    touchZoom: true,
+    tapHold: false
+  });
   var gridLayer = L.layerGroup().addTo(map);
   var trackLayer = L.layerGroup().addTo(map);
+
+  function applyMobileMapGestures() {
+    var mobile = isMobileLayout();
+    var el = map.getContainer();
+    if (mobile) {
+      map.dragging.disable();
+      if (map.boxZoom) map.boxZoom.disable();
+      if (map.keyboard) map.keyboard.disable();
+      el.style.touchAction = "pan-y";
+      el.classList.add("map-page-scroll");
+    } else {
+      map.dragging.enable();
+      if (map.boxZoom) map.boxZoom.enable();
+      if (map.keyboard) map.keyboard.enable();
+      el.style.touchAction = "";
+      el.classList.remove("map-page-scroll");
+    }
+    map.invalidateSize();
+  }
+  applyMobileMapGestures();
+  window.matchMedia("(max-width: 820px)").addEventListener("change", applyMobileMapGestures);
 
   var otm = L.tileLayer("https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png", {
     maxZoom: 17,
