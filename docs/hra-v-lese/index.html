@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=12">
 </head>
 <body>
   <div id="banner" class="banner" role="status"></div>
@@ -27,7 +27,7 @@
   </header>
   <main>
     <div id="map" aria-label="Mapa tras"></div>
-    <p class="map-scroll-hint">Mapa: zoom tlačítky +/− (nebo dvěma prsty). Stránku scrolluj jedním prstem.</p>
+    <p class="map-scroll-hint">Mapa: zoom tlačítky +/−. Celou stránku (včetně mapy) scrolluj jedním prstem.</p>
     <aside class="panel" aria-label="Časová osa a hráči">
       <div class="panel-toolbar">
         <label class="scrubber" for="scrubber">
@@ -36,21 +36,19 @@
           <span id="scrubber-meta" class="scrubber-meta">—</span>
         </label>
       </div>
-      <div class="panel-scroll">
-        <div class="panel-scroll-inner">
-          <h2>Hráči</h2>
-          <div id="legend"></div>
-          <h2>Dvojice</h2>
-          <div id="pairs"></div>
-          <div id="uncertain" class="uncertain"></div>
-          <p class="muted footnote">Podklad: OpenTopoMap (dočasně). Preferovaný turistický podklad Mapy.cz — viz README.</p>
-        </div>
+      <div class="panel-body">
+        <h2>Hráči</h2>
+        <div id="legend"></div>
+        <h2>Dvojice</h2>
+        <div id="pairs"></div>
+        <div id="uncertain" class="uncertain"></div>
+        <p class="muted footnote">Podklad: OpenTopoMap (dočasně). Preferovaný turistický podklad Mapy.cz — viz README.</p>
       </div>
     </aside>
   </main>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-  <script src="config.js"></script>
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <script src="config.js?v=12"></script>
+  <script src="data.js?v=12"></script>
+  <script src="app.js?v=12"></script>
 </body>
 </html>

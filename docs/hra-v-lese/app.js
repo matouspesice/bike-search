@@ -100,6 +100,35 @@
     return window.matchMedia("(max-width: 820px)").matches;
   }
 
+  /** Force document scroll on mobile — kill any leftover viewport lock. */
+  function unlockDocumentScroll() {
+    if (!isMobileLayout()) return;
+    document.documentElement.style.height = "auto";
+    document.documentElement.style.overflowY = "scroll";
+    document.documentElement.style.overflowX = "hidden";
+    document.body.style.height = "auto";
+    document.body.style.minHeight = "0";
+    document.body.style.overflow = "visible";
+    document.body.style.display = "block";
+    var panelBody = document.querySelector(".panel-body");
+    if (panelBody) {
+      panelBody.style.overflow = "visible";
+      panelBody.style.height = "auto";
+      panelBody.style.maxHeight = "none";
+    }
+    var panel = document.querySelector("aside.panel");
+    if (panel) {
+      panel.style.overflow = "visible";
+      panel.style.height = "auto";
+    }
+    var main = document.querySelector("main");
+    if (main) {
+      main.style.height = "auto";
+      main.style.overflow = "visible";
+    }
+  }
+  unlockDocumentScroll();
+
   // Mobile: no one-finger map drag — vertical page scroll must win.
   // Pan/zoom via +/- buttons (and pinch zoom). Desktop keeps normal drag.
   var map = L.map("map", {
@@ -118,6 +147,7 @@
   function applyMobileMapGestures() {
     var mobile = isMobileLayout();
     var el = map.getContainer();
+    unlockDocumentScroll();
     if (mobile) {
       map.dragging.disable();
       if (map.boxZoom) map.boxZoom.disable();
