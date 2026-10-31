@@ -7,11 +7,6 @@
     banner.innerHTML = html;
     banner.classList.add("visible");
   }
-  function hideBanner() {
-    if (!banner) return;
-    banner.classList.remove("visible");
-    banner.innerHTML = "";
-  }
 
   var data = window.HRA_TRACKS;
   if (!data || !data.players) {
@@ -38,7 +33,6 @@
     return { c: ci, r: ri, id: m[1] + String(ri + 1) };
   }
 
-  // Plain [[south, west], [north, east]] — avoids LatLngBounds edge cases
   function cellCorners(c, r) {
     var west = b.west + c * cellW;
     var east = west + cellW;
@@ -54,7 +48,6 @@
     return [b.north - (r + 0.5) * cellH, b.west + (c + 0.5) * cellW];
   }
 
-  // Legend + pairs first so UI works even if map drawing fails later
   var visible = {};
   data.players.forEach(function (p) {
     visible[p.id] = true;
@@ -184,52 +177,165 @@
     }
   }
 
-  function drawPlayers() {
+  function buildEvents() {
+    var events = [];
+    data.players.forEach(function (p) {
+      if (!visible[p.id]) return;
+      p.path.forEach(function (step, idx) {
+        var parsed = parseCell(step[0]);
+        if (!parsed) return;
+        events.push({ t: step[1], idx: idx, player: p, cell: parsed });
+      });
+    });
+    events.sort(function (a, b) {
+      if (a.t === b.t) {
+        if (a.player.name === b.player.name) return a.idx - b.idx;
+        return a.player.name < b.player.name ? -1 : 1;
+      }
+      return a.t < b.t ? -1 : 1;
+    });
+    return events;
+  }
+
+  /** Draw cumulative state through events[0..throughIndex] inclusive. throughIndex -1 = empty. */
+  function renderThrough(throughIndex) {
     trackLayer.clearLayers();
-    data.players.forEach(function (player) {
-      if (!visible[player.id]) return;
-      var pts = [];
-      var seen = {};
-      player.path.forEach(function (step, idx) {
-        var cell = step[0];
-        var time = step[1];
-        var p = parseCell(cell);
-        if (!p) return;
-        var center = cellCenterLatLng(p.c, p.r);
-        pts.push(center);
-        if (!seen[p.id]) {
-          seen[p.id] = true;
-          var fill = L.rectangle(cellCorners(p.c, p.r), {
-            color: player.color,
+    var events = timelineEvents;
+    if (!events.length || throughIndex < 0) return;
+
+    var end = Math.min(throughIndex, events.length - 1);
+    var seen = {};
+    var lastByPlayer = {};
+    var polylines = {};
+
+    var i, ev, key, center, playerId;
+    for (i = 0; i <= end; i++) {
+      ev = events[i];
+      playerId = ev.player.id;
+      key = playerId + ":" + ev.cell.id;
+      center = cellCenterLatLng(ev.cell.c, ev.cell.r);
+
+      if (!polylines[playerId]) polylines[playerId] = [];
+      polylines[playerId].push(center);
+      lastByPlayer[playerId] = ev;
+
+      if (!seen[key]) {
+        seen[key] = true;
+        trackLayer.addLayer(
+          L.rectangle(cellCorners(ev.cell.c, ev.cell.r), {
+            color: ev.player.color,
             weight: 1.4,
-            fillColor: player.color,
+            fillColor: ev.player.color,
             fillOpacity: 0.32,
             opacity: 0.95
-          });
-          fill.bindTooltip(player.name + "<br><strong>" + p.id + "</strong> · " + time, { sticky: true });
-          trackLayer.addLayer(fill);
-        }
-        var order = L.circleMarker(center, {
-          radius: idx === 0 || idx === player.path.length - 1 ? 6 : 4,
-          color: "#ffffff",
-          weight: 1.5,
-          fillColor: player.color,
-          fillOpacity: 1
-        });
-        order.bindTooltip(String(idx + 1) + ". " + p.id + " (" + time + ") — " + player.name);
-        trackLayer.addLayer(order);
-      });
+          }).bindTooltip(ev.player.name + "<br><strong>" + ev.cell.id + "</strong> · " + ev.t, { sticky: true })
+        );
+      }
+    }
+
+    Object.keys(polylines).forEach(function (pid) {
+      var pts = polylines[pid];
       if (pts.length > 1) {
         trackLayer.addLayer(
           L.polyline(pts, {
-            color: player.color,
+            color: events.find(function (e) {
+              return e.player.id === pid;
+            }).player.color,
             weight: 3,
             opacity: 0.9
           })
         );
       }
     });
+
+    // All visited step markers; emphasize current tip per player
+    for (i = 0; i <= end; i++) {
+      ev = events[i];
+      center = cellCenterLatLng(ev.cell.c, ev.cell.r);
+      var isTip = lastByPlayer[ev.player.id] === ev;
+      trackLayer.addLayer(
+        L.circleMarker(center, {
+          radius: isTip ? 7 : 4,
+          color: "#ffffff",
+          weight: 1.5,
+          fillColor: ev.player.color,
+          fillOpacity: 1
+        }).bindTooltip(
+          (isTip ? "● " : "") + String(ev.idx + 1) + ". " + ev.cell.id + " (" + ev.t + ") — " + ev.player.name
+        )
+      );
+    }
   }
+
+  var scrubber = document.getElementById("scrubber");
+  var scrubberMeta = document.getElementById("scrubber-meta");
+  var timelineEvents = [];
+  var playTimer = null;
+  var playBtn = document.getElementById("btn-play");
+  var syncingScrubber = false;
+
+  function updateScrubberMeta(index) {
+    var n = timelineEvents.length;
+    if (!n) {
+      scrubberMeta.textContent = "Žádné body (zapni hráče v legendě).";
+      scrubber.setAttribute("aria-valuetext", "prázdné");
+      return;
+    }
+    var ev = timelineEvents[index];
+    var label =
+      ev.t +
+      " · " +
+      ev.player.name +
+      " · " +
+      ev.cell.id +
+      "  (" +
+      String(index + 1) +
+      "/" +
+      String(n) +
+      ")";
+    scrubberMeta.textContent = label;
+    scrubber.setAttribute("aria-valuetext", label);
+  }
+
+  function syncTimelineUI() {
+    timelineEvents = buildEvents();
+    var n = timelineEvents.length;
+    scrubber.min = "0";
+    scrubber.max = String(Math.max(0, n - 1));
+    scrubber.disabled = n === 0;
+    var idx = n ? n - 1 : 0;
+    syncingScrubber = true;
+    scrubber.value = String(idx);
+    syncingScrubber = false;
+    updateScrubberMeta(idx);
+    renderThrough(n ? idx : -1);
+  }
+
+  function stopPlay() {
+    if (playTimer) {
+      clearInterval(playTimer);
+      playTimer = null;
+    }
+    playBtn.textContent = "Přehrát";
+    playBtn.classList.remove("active");
+  }
+
+  scrubber.addEventListener("input", function () {
+    if (syncingScrubber) return;
+    stopPlay();
+    var idx = parseInt(scrubber.value, 10) || 0;
+    updateScrubberMeta(idx);
+    renderThrough(idx);
+  });
+
+  // Improve mobile dragging of range without scrolling the panel
+  scrubber.addEventListener(
+    "touchstart",
+    function (e) {
+      e.stopPropagation();
+    },
+    { passive: true }
+  );
 
   function fitGameBounds() {
     map.invalidateSize();
@@ -245,7 +351,6 @@
   try {
     map.setView([(b.north + b.south) / 2, (b.west + b.east) / 2], 13);
     drawGrid();
-    drawPlayers();
     L.circleMarker([data.car.lat, data.car.lon], {
       radius: 8,
       color: "#222222",
@@ -263,6 +368,7 @@
       )
       .addTo(map);
 
+    syncTimelineUI();
     fitGameBounds();
     map.whenReady(fitGameBounds);
     setTimeout(fitGameBounds, 150);
@@ -273,11 +379,16 @@
     showBanner("Chyba mapy: " + (err && err.message ? err.message : String(err)));
   }
 
+  function refreshAfterVisibilityChange() {
+    stopPlay();
+    syncTimelineUI();
+  }
+
   legendEl.addEventListener("change", function (e) {
     var t = e.target;
     if (t && t.matches && t.matches("input[type=checkbox][data-id]")) {
       visible[t.getAttribute("data-id")] = t.checked;
-      drawPlayers();
+      refreshAfterVisibilityChange();
     }
   });
 
@@ -286,84 +397,48 @@
       cb.checked = true;
       visible[cb.getAttribute("data-id")] = true;
     });
-    drawPlayers();
+    refreshAfterVisibilityChange();
   };
   document.getElementById("btn-none").onclick = function () {
     legendEl.querySelectorAll("input[type=checkbox]").forEach(function (cb) {
       cb.checked = false;
       visible[cb.getAttribute("data-id")] = false;
     });
-    drawPlayers();
+    refreshAfterVisibilityChange();
   };
-  document.getElementById("btn-fit").onclick = function () {
-    map.fitBounds(
-      [
-        [b.south, b.west],
-        [b.north, b.east]
-      ],
-      { padding: [28, 28], maxZoom: 14 }
-    );
-  };
+  document.getElementById("btn-fit").onclick = fitGameBounds;
 
-  var playTimer = null;
-  var playBtn = document.getElementById("btn-play");
   playBtn.onclick = function () {
     if (playTimer) {
-      clearInterval(playTimer);
-      playTimer = null;
-      playBtn.textContent = "Přehrát pořadí";
-      playBtn.classList.remove("active");
-      drawPlayers();
+      stopPlay();
       return;
     }
+    timelineEvents = buildEvents();
+    if (!timelineEvents.length) return;
+
+    // Restart from beginning when already at the end
+    if ((parseInt(scrubber.value, 10) || 0) >= timelineEvents.length - 1) {
+      syncingScrubber = true;
+      scrubber.value = "0";
+      syncingScrubber = false;
+      updateScrubberMeta(0);
+      renderThrough(0);
+    }
+
     playBtn.textContent = "Stop";
     playBtn.classList.add("active");
-    var events = [];
-    data.players.forEach(function (p) {
-      if (!visible[p.id]) return;
-      p.path.forEach(function (step, idx) {
-        var parsed = parseCell(step[0]);
-        if (!parsed) return;
-        events.push({ t: step[1], idx: idx, player: p, cell: parsed });
-      });
-    });
-    events.sort(function (a, b) {
-      if (a.t === b.t) return a.idx - b.idx;
-      return a.t < b.t ? -1 : 1;
-    });
-    trackLayer.clearLayers();
-    var i = 0;
-    var drawn = {};
+
     playTimer = setInterval(function () {
-      if (i >= events.length) {
-        clearInterval(playTimer);
-        playTimer = null;
-        playBtn.textContent = "Přehrát pořadí";
-        playBtn.classList.remove("active");
+      var next = (parseInt(scrubber.value, 10) || 0) + 1;
+      if (next >= timelineEvents.length) {
+        stopPlay();
         return;
       }
-      var ev = events[i++];
-      var key = ev.player.id + ":" + ev.cell.id;
-      if (!drawn[key]) {
-        drawn[key] = true;
-        trackLayer.addLayer(
-          L.rectangle(cellCorners(ev.cell.c, ev.cell.r), {
-            color: ev.player.color,
-            weight: 1.2,
-            fillColor: ev.player.color,
-            fillOpacity: 0.35
-          }).bindTooltip(ev.player.name + "<br>" + ev.cell.id + " · " + ev.t)
-        );
-      }
-      trackLayer.addLayer(
-        L.circleMarker(cellCenterLatLng(ev.cell.c, ev.cell.r), {
-          radius: 5,
-          color: "#fff",
-          weight: 1,
-          fillColor: ev.player.color,
-          fillOpacity: 1
-        })
-      );
-    }, 280);
+      syncingScrubber = true;
+      scrubber.value = String(next);
+      syncingScrubber = false;
+      updateScrubberMeta(next);
+      renderThrough(next);
+    }, 320);
   };
 })();

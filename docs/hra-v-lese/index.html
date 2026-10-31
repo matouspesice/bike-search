@@ -2,7 +2,7 @@
 <html lang="cs">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Hra v lese — Chalupa</title>
   <meta name="description" content="Digitální mapa tras Hry v lese u Heřmanic / Hřídelce (WhatsApp Chalupa).">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,19 +22,28 @@
       <button type="button" id="btn-fit">Celá mřížka</button>
       <button type="button" id="btn-all">Všichni</button>
       <button type="button" id="btn-none">Nikdo</button>
-      <button type="button" id="btn-play">Přehrát pořadí</button>
+      <button type="button" id="btn-play">Přehrát</button>
     </div>
   </header>
   <main>
     <div id="map" aria-label="Mapa tras"></div>
-    <aside class="panel" aria-label="Hráči a dvojice">
+    <aside class="panel" aria-label="Časová osa a hráči">
+      <div class="panel-toolbar">
+        <label class="scrubber" for="scrubber">
+          <span class="scrubber-title">Pozice v čase</span>
+          <input type="range" id="scrubber" min="0" max="0" value="0" step="1" aria-valuetext="">
+          <span id="scrubber-meta" class="scrubber-meta">—</span>
+        </label>
+      </div>
       <div class="panel-scroll">
-        <h2>Hráči</h2>
-        <div id="legend"></div>
-        <h2>Dvojice</h2>
-        <div id="pairs"></div>
-        <div id="uncertain" class="uncertain"></div>
-        <p class="muted" style="margin-top:1.2rem">Podklad: OpenTopoMap (dočasně). Preferovaný turistický podklad Mapy.cz — viz README.</p>
+        <div class="panel-scroll-inner">
+          <h2>Hráči</h2>
+          <div id="legend"></div>
+          <h2>Dvojice</h2>
+          <div id="pairs"></div>
+          <div id="uncertain" class="uncertain"></div>
+          <p class="muted footnote">Podklad: OpenTopoMap (dočasně). Preferovaný turistický podklad Mapy.cz — viz README.</p>
+        </div>
       </div>
     </aside>
   </main>

@@ -3,13 +3,14 @@ window.HRA_TRACKS = {
   grid: {
     columns: "ABCDEFGHIJKLMNOPQRSTU",
     rows: 17,
-    // Georeference papírové mapy: Úbislavice–Hřídelec / Pustá Proseč (WGS84).
-    // A–U × 1–17; U kvůli Matouš U13.
+    // Georeference papírové mapy (A–T na papíře, U digitálně):
+    // Úbislavice C–D/2–3, Kumburský Újezd G–H/3–4, Pustá Proseč L–M/9,
+    // Heřmanice P–Q/2–3, Hřídelec R–S/15–16 — LS fit village GPS × paper cells.
     bounds: {
-      west: 15.448,
-      east: 15.552,
-      north: 50.491,
-      south: 50.437
+      west: 15.46237,
+      east: 15.54675,
+      north: 50.47873,
+      south: 50.44556
     }
   },
   car: { lat: 50.4654334, lon: 15.5059966, label: "Auto / cíl (Tereza GPS)" },
