@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hra v lese — Chalupa</title>
+  <meta name="description" content="Digitální mapa tras Hry v lese u Heřmanic / Hřídelce (WhatsApp Chalupa).">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Source+Serif+4:opsz,wght@8..60,600;8..60,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="banner" class="banner" role="status"></div>
+  <header class="app-bar">
+    <div>
+      <h1>Hra v lese</h1>
+      <p class="sub">Chalupa · Heřmanice / Hřídelec / Pustá Proseč · mřížka A–U × 1–17</p>
+    </div>
+    <div class="controls">
+      <button type="button" id="btn-fit">Celá mřížka</button>
+      <button type="button" id="btn-all">Všichni</button>
+      <button type="button" id="btn-none">Nikdo</button>
+      <button type="button" id="btn-play">Přehrát pořadí</button>
+    </div>
+  </header>
+  <main>
+    <div id="map" aria-label="Mapa tras"></div>
+    <aside>
+      <h2>Hráči</h2>
+      <div id="legend"></div>
+      <h2>Dvojice</h2>
+      <div id="pairs"></div>
+      <div id="uncertain" class="uncertain"></div>
+      <p class="muted" style="margin-top:1.2rem">Podklad: OpenTopoMap (dočasně). Preferovaný turistický podklad Mapy.cz — viz README.</p>
+    </aside>
+  </main>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="config.js"></script>
+  <script src="config.local.js" onerror="/* optional local key override */"></script>
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
