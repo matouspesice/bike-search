@@ -34,9 +34,9 @@ Digitální mapa rodinné mřížkové hry kolem **Heřmanice / Hřídelec / Pus
 | Dvojice | Důkaz |
 |--------|--------|
 | Honza + Lucka | oba K7 @13:12 |
-| Martin Kolda + Tereza Vrabcová | oba I8 @13:02 |
-| Anežka Pešicová + Matouš Pešice | oba L12 ~13:10 |
-| Markéta Vrabcová + Míra Kubíček | zbývající pár (cesty se nepotkaly) |
+| Martin + Tereza | oba I8 @13:02 |
+| Anežka + Matouš | oba L12 ~13:10 |
+| Markéta + Míra | zbývající pár (cesty se nepotkaly) |
 
 ## Lokálně
 
