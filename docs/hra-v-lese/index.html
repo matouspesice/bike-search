@@ -27,13 +27,15 @@
   </header>
   <main>
     <div id="map" aria-label="Mapa tras"></div>
-    <aside>
-      <h2>Hráči</h2>
-      <div id="legend"></div>
-      <h2>Dvojice</h2>
-      <div id="pairs"></div>
-      <div id="uncertain" class="uncertain"></div>
-      <p class="muted" style="margin-top:1.2rem">Podklad: OpenTopoMap (dočasně). Preferovaný turistický podklad Mapy.cz — viz README.</p>
+    <aside class="panel" aria-label="Hráči a dvojice">
+      <div class="panel-scroll">
+        <h2>Hráči</h2>
+        <div id="legend"></div>
+        <h2>Dvojice</h2>
+        <div id="pairs"></div>
+        <div id="uncertain" class="uncertain"></div>
+        <p class="muted" style="margin-top:1.2rem">Podklad: OpenTopoMap (dočasně). Preferovaný turistický podklad Mapy.cz — viz README.</p>
+      </div>
     </aside>
   </main>
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
