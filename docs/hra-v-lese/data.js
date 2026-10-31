@@ -26,7 +26,7 @@ window.HRA_TRACKS = {
   players: [
     {
       id: "martin",
-      name: "Martin Kolda",
+      name: "Martin",
       color: "#e53935",
       path: [
         ["B14","12:32"],["C12","12:35"],["D12","12:40"],["E11","12:46"],
@@ -35,7 +35,7 @@ window.HRA_TRACKS = {
     },
     {
       id: "mira",
-      name: "Míra Kubíček",
+      name: "Míra",
       color: "#43a047",
       path: [
         ["O15","12:32"],["M16","12:36"],["M15","12:39"],["L16","12:47"],
@@ -44,7 +44,7 @@ window.HRA_TRACKS = {
     },
     {
       id: "anezka",
-      name: "Anežka Pešicová",
+      name: "Anežka",
       color: "#ec407a",
       path: [
         ["F9","12:32"],["G10","12:35"],["H11","12:44"],["I10","12:47"],
@@ -53,7 +53,7 @@ window.HRA_TRACKS = {
     },
     {
       id: "marketa",
-      name: "Markéta Vrabcová",
+      name: "Markéta",
       color: "#fb8c00",
       path: [
         ["I3","12:32"],["J4","12:35"],["J5","12:42"],["K5","12:49"],["J6","13:04"]
@@ -61,7 +61,7 @@ window.HRA_TRACKS = {
     },
     {
       id: "matous",
-      name: "Matouš Pešice",
+      name: "Matouš",
       color: "#1e88e5",
       path: [
         ["T14","12:32"],["U13","12:38"],["T12","12:41"],["S13","12:47"],
@@ -71,7 +71,7 @@ window.HRA_TRACKS = {
     },
     {
       id: "tereza",
-      name: "Tereza Vrabcová",
+      name: "Tereza",
       color: "#00897b",
       path: [
         ["P8","12:32"],["O9","12:39"],["N8","12:51"],["M7","12:51"],
