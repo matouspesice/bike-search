@@ -21,7 +21,7 @@ window.HRA_TRACKS = {
     { id: "honza-lucka", label: "Honza + Lucka", members: ["honza", "lucka"], note: "oba K7 @13:12" },
     { id: "martin-tereza", label: "Martin + Tereza", members: ["martin", "tereza"], note: "oba I8 @13:02" },
     { id: "anezka-matous", label: "Anežka + Matouš", members: ["anezka", "matous"], note: "oba L12 ~13:10" },
-    { id: "marketa-mira", label: "Markéta + Míra", members: ["marketa", "mira"], note: "zbývající dvojice (cesty se nepotkaly)" }
+    { id: "marketa-mira", label: "Markéta + Míra", members: ["marketa", "mira"], note: "dvojice (cesty se nepotkaly)" }
   ],
   players: [
     {
@@ -97,10 +97,5 @@ window.HRA_TRACKS = {
         ["M5","12:58"],["L6","13:04"],["K7","13:12"]
       ]
     }
-  ],
-  uncertain: [
-    "Anežka K12 — v briefu volitelně, na screenshotech nepotvrzeno",
-    "Markéta + Míra — párování jen eliminací, trasy se neprotínají",
-    "Georeference mřížky je vizuální odhad vůči obcím (ne přesný scan papíru)"
   ]
 };

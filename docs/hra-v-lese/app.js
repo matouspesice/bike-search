@@ -82,15 +82,6 @@
     pairsEl.appendChild(div);
   });
 
-  document.getElementById("uncertain").innerHTML =
-    "<strong>Nejistoty</strong><ul>" +
-    data.uncertain
-      .map(function (u) {
-        return "<li>" + u + "</li>";
-      })
-      .join("") +
-    "</ul>";
-
   if (typeof L === "undefined") {
     showBanner("Chyba mapy: Leaflet se nenačetl.");
     return;
@@ -195,9 +186,6 @@
     usingMapy = true;
   } else {
     otm.addTo(map);
-    showBanner(
-      "Chybí API klíč Mapy.cz — dočasný podklad OpenTopoMap. Přidej <code>config.js</code> nebo <code>?apikey=…</code> (viz README)."
-    );
   }
 
   function drawGrid() {

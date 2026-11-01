@@ -19,7 +19,7 @@ Digitální mapa rodinné mřížkové hry kolem **Heřmanice / Hřídelec / Pus
 2. Buď:
    - zkopíruj `config.example.js` → `config.js` a doplň `mapyApiKey`, **nebo**
    - otevři stránku s `?apikey=TVUJ_KLIC`.
-3. Při platném klíči se načte Mapy outdoor; při chybě dlaždic zůstane OpenTopoMap a banner.
+3. Při platném klíči se načte Mapy outdoor; při chybě dlaždic zůstane OpenTopoMap (UI banner jen při selhání dlaždic / Leaflet).
 
 `config.js` je v `.gitignore` — klíč necommitovat.
 
@@ -36,7 +36,7 @@ Digitální mapa rodinné mřížkové hry kolem **Heřmanice / Hřídelec / Pus
 | Honza + Lucka | oba K7 @13:12 |
 | Martin + Tereza | oba I8 @13:02 |
 | Anežka + Matouš | oba L12 ~13:10 |
-| Markéta + Míra | zbývající pár (cesty se nepotkaly) |
+| Markéta + Míra | dvojice (cesty se nepotkaly) |
 
 ## Lokálně
 
