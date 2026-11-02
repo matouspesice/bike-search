@@ -91,9 +91,34 @@
     return window.matchMedia("(max-width: 820px)").matches;
   }
 
-  /** Force document scroll on mobile — kill any leftover viewport lock. */
+  /** Mobile: force document scroll. Desktop: clear inline overrides so CSS split-pane scroll works. */
   function unlockDocumentScroll() {
-    if (!isMobileLayout()) return;
+    var panelBody = document.querySelector(".panel-body");
+    var panel = document.querySelector("aside.panel");
+    var main = document.querySelector("main");
+    if (!isMobileLayout()) {
+      document.documentElement.style.height = "";
+      document.documentElement.style.overflowY = "";
+      document.documentElement.style.overflowX = "";
+      document.body.style.height = "";
+      document.body.style.minHeight = "";
+      document.body.style.overflow = "";
+      document.body.style.display = "";
+      if (panelBody) {
+        panelBody.style.overflow = "";
+        panelBody.style.height = "";
+        panelBody.style.maxHeight = "";
+      }
+      if (panel) {
+        panel.style.overflow = "";
+        panel.style.height = "";
+      }
+      if (main) {
+        main.style.height = "";
+        main.style.overflow = "";
+      }
+      return;
+    }
     document.documentElement.style.height = "auto";
     document.documentElement.style.overflowY = "scroll";
     document.documentElement.style.overflowX = "hidden";
@@ -101,18 +126,15 @@
     document.body.style.minHeight = "0";
     document.body.style.overflow = "visible";
     document.body.style.display = "block";
-    var panelBody = document.querySelector(".panel-body");
     if (panelBody) {
       panelBody.style.overflow = "visible";
       panelBody.style.height = "auto";
       panelBody.style.maxHeight = "none";
     }
-    var panel = document.querySelector("aside.panel");
     if (panel) {
       panel.style.overflow = "visible";
       panel.style.height = "auto";
     }
-    var main = document.querySelector("main");
     if (main) {
       main.style.height = "auto";
       main.style.overflow = "visible";
