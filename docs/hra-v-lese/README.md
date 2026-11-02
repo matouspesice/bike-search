@@ -10,18 +10,14 @@ Digitální mapa rodinné mřížkové hry kolem **Heřmanice / Hřídelec / Pus
 
 ## Podklad mapy
 
-- **Teď:** [OpenTopoMap](https://opentopomap.org) (outdoor/topo) — uživatel nemá Mapy.cz API klíč.
-- **Preferováno:** turistická vrstva **Mapy.cz / Mapy.com** (`outdoor`) přes [Map Tiles REST API](https://developer.mapy.com/rest-api-mapy-cz/function/map-tiles/).
+- **Live:** turistická vrstva **Mapy.cz / Mapy.com** (`outdoor`) přes [Map Tiles REST API](https://developer.mapy.com/rest-api-mapy-cz/function/map-tiles/) — klíč v commitnutém `config.js` (veřejný Pages, rodinná mapa).
+- **Fallback:** [OpenTopoMap](https://opentopomap.org), pokud Mapy dlaždice selžou.
 
-### Jak zapnout Mapy.cz později
+### Klíč / lokální override
 
-1. Založ projekt a klíč na [developer.mapy.com/account](https://developer.mapy.com/account) (Basic tarif má volné kredity).
-2. Buď:
-   - zkopíruj `config.example.js` → `config.js` a doplň `mapyApiKey`, **nebo**
-   - otevři stránku s `?apikey=TVUJ_KLIC`.
-3. Při platném klíči se načte Mapy outdoor; při chybě dlaždic zůstane OpenTopoMap (UI banner jen při selhání dlaždic / Leaflet).
-
-`config.js` je v `.gitignore` — klíč necommitovat.
+1. Klíč spravuj na [developer.mapy.com/account](https://developer.mapy.com/account).
+2. Live Pages čte `config.js` (`preferMapy: true`). Pro jednorázový override: `?apikey=…`.
+3. Šablona bez klíče: `config.example.js`. Při chybě dlaždic zůstane OpenTopoMap (UI banner jen při selhání dlaždic / Leaflet).
 
 ## Mřížka a data
 
