@@ -256,12 +256,11 @@ aside h2:first-of-type { margin-top: 0; }
   }
   .map-scroll-hint { display: none; }
   main {
-    flex: 1;
+    flex: 1 1 auto;
     display: grid;
     grid-template-columns: 1fr minmax(280px, 340px);
     min-height: 0;
-    height: calc(100vh - 7.5rem);
-    height: calc(100dvh - 7.5rem);
+    height: auto;
     overflow: hidden;
   }
   #map {
@@ -274,12 +273,13 @@ aside h2:first-of-type { margin-top: 0; }
   #map .leaflet-container {
     touch-action: none;
   }
+  /* !important beats mobile-first overflow/height locks so the side panel scrolls */
   aside.panel {
     display: flex;
     flex-direction: column;
-    height: 100%;
-    max-height: none;
-    overflow: hidden;
+    height: 100% !important;
+    max-height: none !important;
+    overflow: hidden !important;
     isolation: isolate;
     border-left: 1px solid rgba(44,62,42,0.15);
   }
@@ -292,12 +292,12 @@ aside h2:first-of-type { margin-top: 0; }
   }
   .scrubber input[type="range"] { height: 2rem; }
   .panel-body {
-    flex: 1;
-    min-height: 0;
-    height: auto;
-    max-height: none;
-    overflow-x: hidden;
-    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 0 !important;
+    height: auto !important;
+    max-height: none !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
     touch-action: pan-y;
